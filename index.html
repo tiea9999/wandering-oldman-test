@@ -32,14 +32,13 @@
   </style>
 </head>
 <body>
-  <video id="video" controls autoplay playsinline></video>
+  <video id="video" autoplay playsinline></video>
   <div id="status">🟡 กำลังโหลด...</div>
 
 <script>
 (function(){
-  // 🔒 URL ที่ซ่อนด้วย Base64
   const encoded = "aHR0cDovLzYzOTVvbmxpbmUuZGRucy5uZXQ6ODA4MC9tZW1mcy80OTRhOWEzNy00NWU5LTQwYWUtOWY3My0xNDg5OTk0YWIyYzNfb3V0cHV0XzAubTN1OD9zZXNzaW9uPThXVDVrSFpZOW9KcWZUNGI4REpnQUQ=";
-  const url = atob(encoded).trim(); // แปลง Base64 กลับเป็นลิงก์จริง
+  const url = atob(encoded).trim();
 
   const video = document.getElementById('video');
   const status = document.getElementById('status');
@@ -55,7 +54,7 @@
     });
     hls.on(Hls.Events.ERROR, function(e, data){
       console.error('HLS error:', data);
-      status.textContent = '🔴 เกิดข้อผิดพลาดในการเล่น';
+      status.textContent = '🔴 เกิดข้อผิดพลาด';
     });
   } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
     video.src = url;
