@@ -6,27 +6,28 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,shrink-to-fit=no">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0"></script>
   <style>
-    html,body {
-      margin:0;
-      height:100%;
-      background:#000;
-      overflow:hidden;
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
     }
-    #video {
-      width:100vw;
-      height:100vh;
-      background:#000;
+    video {
+      width: 100vw;
+      height: 100vh;
+      background: #000;
       object-fit: cover;
     }
     #status {
-      position:absolute;
-      right:10px;
-      bottom:10px;
-      color:#0f0;
-      font-family:monospace;
-      padding:6px;
-      background:rgba(0,0,0,0.5);
-      border-radius:6px;
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      color: #0f0;
+      font-family: monospace;
+      padding: 6px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 6px;
+      z-index: 99;
     }
   </style>
 </head>
@@ -36,9 +37,9 @@
 
 <script>
 (function(){
-  // ใส่ลิงก์ m3u8 ของคุณที่นี่ (เข้ารหัส Base64)
+  // 🔒 URL ที่ซ่อนด้วย Base64
   const encoded = "aHR0cDovLzYzOTVvbmxpbmUuZGRucy5uZXQ6ODA4MC9tZW1mcy80OTRhOWEzNy00NWU5LTQwYWUtOWY3My0xNDg5OTk0YWIyYzNfb3V0cHV0XzAubTN1OD9zZXNzaW9uPThXVDVrSFpZOW9KcWZUNGI4REpnQUQ=";
-  const url = atob(encoded); // แปลงกลับเป็นลิงก์จริง
+  const url = atob(encoded).trim(); // แปลง Base64 กลับเป็นลิงก์จริง
 
   const video = document.getElementById('video');
   const status = document.getElementById('status');
@@ -48,19 +49,19 @@
     hls.loadSource(url);
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, function() {
-      video.muted = false; // เปิดเสียงอัตโนมัติ
+      video.muted = false;
       video.play().catch(()=>{});
-      status.textContent = '🟢 กำลังเล่น...';
+      status.textContent = '🟢 เล่นปกติ';
     });
     hls.on(Hls.Events.ERROR, function(e, data){
-      console.error(data);
-      status.textContent = '🔴 เกิดข้อผิดพลาด';
+      console.error('HLS error:', data);
+      status.textContent = '🔴 เกิดข้อผิดพลาดในการเล่น';
     });
   } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
     video.src = url;
     video.addEventListener('loadedmetadata', () => {
       video.play();
-      status.textContent = '🟢 กำลังเล่น...';
+      status.textContent = '🟢 เล่นปกติ';
     });
   } else {
     status.textContent = '⚠️ เบราว์เซอร์ไม่รองรับ HLS';
